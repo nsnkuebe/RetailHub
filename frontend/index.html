@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RetailHub — Inventory & Order Management System</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header Section -->
+  <header class="header">
+    <div class="header-container">
+      <div class="logo-area">
+        <div class="logo-badge">RH</div>
+        <div>
+          <h1 class="logo-title">RetailHub</h1>
+          <span class="logo-subtitle">CS4431 HCI E-Commerce System</span>
+        </div>
+      </div>
+
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search products, brands, SKUs..." autocomplete="off">
+        <button id="clearSearchBtn" class="clear-btn hidden">&times;</button>
+      </div>
+
+      <div class="header-actions">
+        <!-- Role Switcher -->
+        <button id="roleToggleBtn" class="btn btn-outline">
+          <span id="roleLabel">Customer View</span>
+        </button>
+
+        <!-- Currency Toggle -->
+        <div class="currency-switch">
+          <button id="currMaluti" class="curr-btn active">M Maluti</button>
+          <button id="currZar" class="curr-btn">R ZAR</button>
+          <button id="currUsd" class="curr-btn">$ USD</button>
+        </div>
+
+        <!-- Cart Button -->
+        <button id="cartBtn" class="btn btn-primary cart-btn">
+          <span>Cart</span>
+          <span id="cartCountBadge" class="badge">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-container">
+    <!-- Category Filter Bar -->
+    <section class="filters-section">
+      <div class="category-pills" id="categoryPills">
+        <!-- Injected via JavaScript -->
+      </div>
+
+      <div class="sort-controls">
+        <label for="sortSelect">Sort By:</label>
+        <select id="sortSelect">
+          <option value="featured">Featured Picks</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="rating">Highest Rated</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- Customer View: Product Catalogue Grid -->
+    <section id="customerView" class="view-section">
+      <div class="product-grid" id="productGrid">
+        <!-- Product Cards Injected dynamically -->
+      </div>
+    </section>
+
+    <!-- Admin View: Inventory & Order Manager -->
+    <section id="adminView" class="view-section hidden">
+      <div class="admin-header">
+        <div>
+          <h2>Inventory Management System</h2>
+          <p>Real-time CRUD operations, batch restock, and stock threshold tracking.</p>
+        </div>
+        <button id="openAddProductModalBtn" class="btn btn-accent">+ Add New Product</button>
+      </div>
+
+      <div class="table-container">
+        <table class="inventory-table">
+          <thead>
+            <tr>
+              <th>SKU / Product</th>
+              <th>Category</th>
+              <th>Cost / Retail Price</th>
+              <th>Stock Level</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="inventoryTableBody">
+            <!-- Injected via JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- Cart Drawer -->
+  <div id="cartDrawer" class="drawer hidden">
+    <div class="drawer-overlay" id="cartOverlay"></div>
+    <div class="drawer-panel">
+      <div class="drawer-header">
+        <h3>Shopping Cart (<span id="cartDrawerCount">0</span> items)</h3>
+        <button id="closeCartBtn" class="close-btn">&times;</button>
+      </div>
+      <div class="drawer-body" id="cartItemsList">
+        <!-- Cart Items Injected -->
+      </div>
+      <div class="drawer-footer">
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span id="cartSubtotal">R0.00</span>
+        </div>
+        <button id="checkoutBtn" class="btn btn-accent btn-block">Proceed to Checkout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Detail Modal -->
+  <div id="productModal" class="modal hidden">
+    <div class="modal-overlay" id="productModalOverlay"></div>
+    <div class="modal-content product-modal-content">
+      <button id="closeProductModalBtn" class="close-btn">&times;</button>
+      <div class="product-modal-grid" id="productModalBody">
+        <!-- Dynamic Product Details -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Add/Edit Product Modal -->
+  <div id="productFormModal" class="modal hidden">
+    <div class="modal-overlay" id="productFormOverlay"></div>
+    <div class="modal-content form-modal-content">
+      <button id="closeProductFormBtn" class="close-btn">&times;</button>
+      <h3 id="productFormTitle">Add New Product</h3>
+      <form id="productForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="formSku">SKU *</label>
+            <input type="text" id="formSku" required placeholder="e.g. RH-ELEC-009">
+          </div>
+          <div class="form-group">
+            <label for="formName">Product Name *</label>
+            <input type="text" id="formName" required placeholder="e.g. Wireless Pro Earbuds">
+          </div>
+          <div class="form-group">
+            <label for="formCategory">Category *</label>
+            <select id="formCategory" required>
+              <option value="Electronics & Audio">Electronics & Audio</option>
+              <option value="Apparel & Footwear">Apparel & Footwear</option>
+              <option value="Home & Lifestyle">Home & Lifestyle</option>
+              <option value="Fitness & Outdoors">Fitness & Outdoors</option>
+              <option value="Accessories & Bags">Accessories & Bags</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="formBrand">Brand *</label>
+            <input type="text" id="formBrand" required placeholder="e.g. SonicMaster">
+          </div>
+          <div class="form-group">
+            <label for="formPrice">Retail Price (ZAR) *</label>
+            <input type="number" id="formPrice" step="0.01" min="0" required placeholder="999.00">
+          </div>
+          <div class="form-group">
+            <label for="formCost">Cost Price (ZAR)</label>
+            <input type="number" id="formCost" step="0.01" min="0" placeholder="450.00">
+          </div>
+          <div class="form-group">
+            <label for="formStock">Stock Quantity *</label>
+            <input type="number" id="formStock" min="0" required placeholder="15">
+          </div>
+          <div class="form-group">
+            <label for="formThreshold">Low Stock Alert Threshold</label>
+            <input type="number" id="formThreshold" min="1" value="5">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="formDescription">Description</label>
+          <textarea id="formDescription" rows="3" placeholder="Detailed product specifications..."></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="button" id="cancelProductFormBtn" class="btn btn-outline">Cancel</button>
+          <button type="submit" class="btn btn-accent">Save Product Record</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Standalone Vanilla JS Application -->
+  <script src="app.js"></script>
+</body>
+</html>
